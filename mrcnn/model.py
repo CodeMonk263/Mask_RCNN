@@ -1817,14 +1817,16 @@ def data_generator(dataset, config, shuffle=True, augment=False, augmentation=No
 
 
 		
-class AnchorsLayer(KE.Layer):
+class AnchorsLayer(tf.keras.layers.Layer):
+    def __init__(self, name="anchors", **kwargs):
+        super(AnchorsLayer, self).__init__(name=name, **kwargs)
 
-    def __init__(self, anchors, **kwargs):
-        super(AnchorsLayer, self).__init__(**kwargs)
-        self.anchors = anchors
-    
-    def call(self, image_placeholder):
-        return tf.Variable(self.anchors)
+    def call(self, anchor):
+        return anchor
+
+    def get_config(self) :
+        config = super(AnchorsLayer, self).get_config()
+        return config
 
 ############################################################
 #  MaskRCNN Class
