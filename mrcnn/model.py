@@ -1816,6 +1816,16 @@ def data_generator(dataset, config, shuffle=True, augment=False, augmentation=No
                 raise
 
 
+		
+class AnchorsLayer(KE.Layer):
+
+    def __init__(self, anchors, **kwargs):
+        super(AnchorsLayer, self).__init__(**kwargs)
+        self.anchors = anchors
+    
+    def call(self, image_placeholder):
+        return tf.Variable(self.anchors)
+
 ############################################################
 #  MaskRCNN Class
 ############################################################
@@ -1934,7 +1944,9 @@ class MaskRCNN():
             # TODO: can this be optimized to avoid duplicating the anchors?
             anchors = np.broadcast_to(anchors, (config.BATCH_SIZE,) + anchors.shape)
             # A hack to get around Keras's bad support for constants
-            anchors = KL.Lambda(lambda x: tf.Variable(anchors), name="anchors")(input_image)
+#             anchors = KL.Lambda(lambda x: tf.Variable(anchors), name="anchors")(input_image)
+	    anchor_layer = AnchorsLayer(name="anchors")
+            anchors = anchor_layer(anchors)
         else:
             anchors = input_anchors
 
