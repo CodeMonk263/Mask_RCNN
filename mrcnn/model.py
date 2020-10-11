@@ -1966,7 +1966,7 @@ class MaskRCNN():
         output_names = ["rpn_class_logits", "rpn_class", "rpn_bbox"]
         outputs = list(zip(*layer_outputs))
         outputs = [KL.Concatenate(axis=1, name=n)(list(o))
-                   for o, n in zip(outputs, output_names)]
+                   for o, n in zip(outputs, output_names)]([flatten, aux_input])
 
         rpn_class_logits, rpn_class, rpn_bbox = outputs
 
