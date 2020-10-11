@@ -1970,6 +1970,7 @@ class MaskRCNN():
         for o, n in zip(outputs, output_names):
             l_output.append(o)
             var_n = n
+        l_output = tf.stack(l_output)
         outputs = KL.Concatenate(axis=1, name=var_n)(l_output)
 
         rpn_class_logits, rpn_class, rpn_bbox = outputs
